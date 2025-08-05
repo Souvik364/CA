@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CA Foundation: The 28-Day Apex Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Neutrals (Slate, Stone, Sky Blue accent) -->
+    <!-- Application Structure Plan: A tabbed dashboard SPA with five sections: Dashboard, Master Plan, Subject Deep Dive (with interactive charts), Cognitive Toolkit, and Final Week. This structure deconstructs the dense reports into a user-driven, explorable format, preventing overwhelm and allowing users to focus on specific strategic areas at their own pace. -->
+    <!-- Visualization & Content Choices: Report Info: Subject chapter weightage -> Goal: Compare/Prioritize -> Viz: Interactive Chart.js Donut Chart -> Interaction: Click slices to filter chapter list -> Justification: Provides an immediate visual summary of priorities and allows for quick, interactive exploration of the most important topics. Report Info: P-A-C Framework -> Goal: Organize/Explain -> Viz: HTML/Tailwind CSS diagram -> Interaction: Static visual guide -> Justification: A clear, structured visual is more effective than a block of text for explaining a procedural framework. Report Info: Learning Techniques -> Goal: Inform/Organize -> Viz: Accordion/Toggle Cards -> Interaction: Click to expand/collapse -> Justification: Reduces initial cognitive load and allows users to explore techniques one by one. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tab-active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .tab-inactive {
+            border-color: transparent;
+            color: #475569;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .subject-tab-active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .subject-tab-inactive {
+            background-color: #e5e7eb;
+            color: #374151;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">The 28-Day Apex Plan</h1>
+            <p class="mt-2 text-lg text-slate-600">Your Interactive Blueprint for Scoring 90+ in the CA Foundation Exam</p>
+        </header>
+
+        <nav class="mb-8">
+            <div class="flex flex-wrap justify-center border-b border-slate-200">
+                <button data-tab="dashboard" class="tab-btn text-sm md:text-base font-medium py-3 px-4 md:px-6 border-b-2 transition-colors duration-300 tab-active">
+                    <span class="mr-2">📊</span>Dashboard
+                </button>
+                <button data-tab="masterPlan" class="tab-btn text-sm md:text-base font-medium py-3 px-4 md:px-6 border-b-2 transition-colors duration-300 tab-inactive">
+                    <span class="mr-2">🗓️</span>Master Plan
+                </button>
+                <button data-tab="subjectDive" class="tab-btn text-sm md:text-base font-medium py-3 px-4 md:px-6 border-b-2 transition-colors duration-300 tab-inactive">
+                    <span class="mr-2">📚</span>Subject Deep Dive
+                </button>
+                <button data-tab="cognitiveToolkit" class="tab-btn text-sm md:text-base font-medium py-3 px-4 md:px-6 border-b-2 transition-colors duration-300 tab-inactive">
+                    <span class="mr-2">🧠</span>Cognitive Toolkit
+                </button>
+                <button data-tab="finalWeek" class="tab-btn text-sm md:text-base font-medium py-3 px-4 md:px-6 border-b-2 transition-colors duration-300 tab-inactive">
+                    <span class="mr-2">🏆</span>Final Gauntlet
+                </button>
+            </div>
+        </nav>
+
+        <main>
+            <section id="dashboard" class="content-section active">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4 text-slate-900">The 28-Day Challenge: A Framework for Peak Performance</h2>
+                    <p class="text-slate-600 mb-6">
+                        Scoring over 90 in the CA Foundation exam in just 28 days is an ambitious goal that demands a meticulously engineered strategy. This interactive planner translates the official ICAI syllabus and proven study techniques into an actionable, day-by-day blueprint. It's designed to optimize your existing knowledge through strategic prioritization, cognitive efficiency, and holistic endurance. This dashboard provides a high-level overview of the exam structure and the core pillars of our plan.
+                    </p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-blue-800">Paper 1: Accounting</h3>
+                            <p class="text-sm text-blue-600">Subjective | 100 Marks | 3 Hrs</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-green-800">Paper 2: Business Laws</h3>
+                            <p class="text-sm text-green-600">Subjective | 100 Marks | 3 Hrs</p>
+                        </div>
+                        <div class="bg-amber-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-amber-800">Paper 3: Quants Aptitude</h3>
+                            <p class="text-sm text-amber-600">Objective | 100 Marks | 2 Hrs (-0.25)</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-red-800">Paper 4: Business Economics</h3>
+                            <p class="text-sm text-red-600">Objective | 100 Marks | 2 Hrs (-0.25)</p>
+                        </div>
+                    </div>
+                     <div class="mt-8">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Core Strategic Pillars</h3>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="bg-slate-100 p-5 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-slate-900">1. Strategic Prioritization</h4>
+                                <p class="text-slate-600">Focus ruthlessly on high-weightage topics using ABC Analysis to maximize your score return on time invested.</p>
+                            </div>
+                            <div class="bg-slate-100 p-5 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-slate-900">2. Cognitive Efficiency</h4>
+                                <p class="text-slate-600">Employ advanced learning techniques like Active Recall to learn faster, understand deeper, and retain longer.</p>
+                            </div>
+                            <div class="bg-slate-100 p-5 rounded-lg">
+                                <h4 class="font-semibold text-lg mb-2 text-slate-900">3. Holistic Endurance</h4>
+                                <p class="text-slate-600">Maintain peak performance with structured protocols for sleep, breaks, and stress management to prevent burnout.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="masterPlan" class="content-section">
+                 <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h2 class="text-2xl font-bold mb-4 text-slate-900">The Thematic Weekly Structure</h2>
+                     <p class="text-slate-600 mb-6">
+                        The 28 days are logically divided into four thematic weeks, progressing from knowledge acquisition to full-scale exam simulation. This structure ensures a comprehensive and strategic approach to mastering the syllabus under a tight deadline.
+                    </p>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="border border-slate-200 p-5 rounded-lg bg-slate-50">
+                            <h3 class="font-bold text-lg text-slate-800">Week 1 <span class="text-sm font-medium text-blue-600">(Days 1-7)</span></h3>
+                            <p class="mt-1 font-semibold">Foundation & High-Yield</p>
+                            <p class="mt-2 text-sm text-slate-600">Complete the first pass of all Category 'A' topics to build a strong conceptual base and secure foundational marks early.</p>
+                        </div>
+                        <div class="border border-slate-200 p-5 rounded-lg bg-slate-50">
+                            <h3 class="font-bold text-lg text-slate-800">Week 2 <span class="text-sm font-medium text-blue-600">(Days 8-14)</span></h3>
+                             <p class="mt-1 font-semibold">Consolidation & Expansion</p>
+                            <p class="mt-2 text-sm text-slate-600">Cover all Category 'B' topics while implementing structured revision for Week 1's topics to combat the forgetting curve.</p>
+                        </div>
+                        <div class="border border-slate-200 p-5 rounded-lg bg-slate-50">
+                            <h3 class="font-bold text-lg text-slate-800">Week 3 <span class="text-sm font-medium text-blue-600">(Days 15-21)</span></h3>
+                             <p class="mt-1 font-semibold">Intensive Practice</p>
+                            <p class="mt-2 text-sm text-slate-600">Shift focus from learning to application. Solve MTPs, RTPs, and past papers to master problem-solving under pressure.</p>
+                        </div>
+                        <div class="border border-slate-200 p-5 rounded-lg bg-slate-50">
+                            <h3 class="font-bold text-lg text-slate-800">Week 4 <span class="text-sm font-medium text-blue-600">(Days 22-28)</span></h3>
+                             <p class="mt-1 font-semibold">Mock Tests & Refinement</p>
+                            <p class="mt-2 text-sm text-slate-600">A full-scale dress rehearsal. Take daily mock tests, analyze performance, and conduct targeted revisions on weak areas.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold mb-4 text-slate-900">The Daily Grind: 12-Hour Study Template</h2>
+                    <p class="text-slate-600 mb-6">
+                        This template structures your day for maximum focus and cognitive balance, pairing practical and theoretical subjects. Use the Pomodoro Technique (50 min study, 10 min break) for each session.
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-500">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 rounded-l-lg">Time Slot</th>
+                                    <th scope="col" class="px-6 py-3">Activity</th>
+                                    <th scope="col" class="px-6 py-3 rounded-r-lg">Focus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4 font-medium text-slate-900">6:00 - 7:00</td>
+                                    <td class="px-6 py-4">Active Recall & Planning</td>
+                                    <td class="px-6 py-4">Review previous day's topics from memory.</td>
+                                </tr>
+                                <tr class="bg-slate-50 border-b">
+                                    <td class="px-6 py-4 font-medium text-slate-900">7:00 - 9:30</td>
+                                    <td class="px-6 py-4">Study Session 1 (Practical)</td>
+                                    <td class="px-6 py-4">e.g., Accounting or Quantitative Aptitude</td>
+                                </tr>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4 font-medium text-slate-900">10:00 - 12:30</td>
+                                    <td class="px-6 py-4">Study Session 2 (Theory)</td>
+                                    <td class="px-6 py-4">e.g., Business Law or Business Economics</td>
+                                </tr>
+                                <tr class="bg-slate-50 border-b">
+                                    <td class="px-6 py-4 font-medium text-slate-900">1:30 - 4:00</td>
+                                    <td class="px-6 py-4">Study Session 3 (Practical)</td>
+                                    <td class="px-6 py-4">Continue with the day's practical subject.</td>
+                                </tr>
+                                <tr class="bg-white border-b">
+                                    <td class="px-6 py-4 font-medium text-slate-900">4:30 - 6:30</td>
+                                    <td class="px-6 py-4">Study Session 4 (Theory)</td>
+                                    <td class="px-6 py-4">Continue with the day's theory subject.</td>
+                                </tr>
+                                <tr class="bg-slate-50">
+                                    <td class="px-6 py-4 font-medium text-slate-900">7:30 - 9:30</td>
+                                    <td class="px-6 py-4">Revision & MCQ Practice</td>
+                                    <td class="px-6 py-4">Consolidate day's learning and solve problems.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="subjectDive" class="content-section">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h2 class="text-2xl font-bold mb-2 text-slate-900">Subject Deep Dive</h2>
+                    <p class="text-slate-600 mb-6">
+                        Select a subject to view its strategic breakdown. The interactive chart shows the ABC analysis—a prioritization of chapters based on exam weightage. Click on a category in the chart legend to filter the chapter list and focus on what matters most.
+                    </p>
+                    <div id="subject-tabs" class="flex flex-wrap justify-center gap-2 mb-6">
+                        <button data-subject="accounting" class="subject-tab-btn py-2 px-4 rounded-md text-sm font-semibold transition-colors duration-200 subject-tab-active">Accounting</button>
+                        <button data-subject="law" class="subject-tab-btn py-2 px-4 rounded-md text-sm font-semibold transition-colors duration-200 subject-tab-inactive">Business Laws</button>
+                        <button data-subject="quants" class="subject-tab-btn py-2 px-4 rounded-md text-sm font-semibold transition-colors duration-200 subject-tab-inactive">Quantitative Aptitude</button>
+                        <button data-subject="economics" class="subject-tab-btn py-2 px-4 rounded-md text-sm font-semibold transition-colors duration-200 subject-tab-inactive">Business Economics</button>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-8 items-start">
+                        <div>
+                            <h3 id="chart-title" class="text-xl font-bold text-center mb-4 text-slate-800"></h3>
+                            <div class="chart-container">
+                                <canvas id="subjectChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="mt-4 lg:mt-0">
+                             <h3 class="text-xl font-bold mb-4 text-slate-800">Chapter Prioritization</h3>
+                            <div id="chapter-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                    
+                    <div id="mastery-techniques" class="mt-10">
+                        <h3 class="text-xl font-bold mb-4 text-slate-800">Subject Mastery Techniques</h3>
+                        <div id="technique-content"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cognitiveToolkit" class="content-section">
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h2 class="text-2xl font-bold mb-2 text-slate-900">Cognitive Toolkit: Study Smarter, Not Harder</h2>
+                    <p class="text-slate-600 mb-6">
+                        Conventional study methods are inefficient for a 28-day sprint. This toolkit contains advanced, science-backed techniques to accelerate your learning, deepen your understanding, and dramatically improve retention.
+                    </p>
+                    <div id="accordion-container" class="space-y-4">
+                        <div class="accordion-item border border-slate-200 rounded-lg">
+                            <button class="accordion-header w-full flex justify-between items-center text-left p-4 bg-slate-50 hover:bg-slate-100 transition">
+                                <span class="font-semibold text-lg text-slate-800">Active Recall</span>
+                                <span class="accordion-icon text-blue-500 text-2xl font-light transform transition-transform">+</span>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-slate-200">
+                                    <p class="text-slate-600 mb-4">Active recall is the act of retrieving information from your brain, which is far more effective for building strong memories than passively re-reading. It's the difference between reading a map and trying to draw it from memory.</p>
+                                    <h4 class="font-semibold mb-2">How to Implement:</h4>
+                                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                                        <li><strong>The Blurting Method:</strong> After studying a topic, close your book and write down everything you remember on a blank page. Then, compare with the source material to find and fill your knowledge gaps.</li>
+                                        <li><strong>Self-Quizzing:</strong> Turn chapter headings and key concepts into questions. Regularly quiz yourself without looking at the answers to simulate exam conditions and reinforce memory.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item border border-slate-200 rounded-lg">
+                            <button class="accordion-header w-full flex justify-between items-center text-left p-4 bg-slate-50 hover:bg-slate-100 transition">
+                                <span class="font-semibold text-lg text-slate-800">The Feynman Technique</span>
+                                 <span class="accordion-icon text-blue-500 text-2xl font-light transform transition-transform">+</span>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-slate-200">
+                                    <p class="text-slate-600 mb-4">This is the ultimate test of true understanding. If you can't explain a concept in simple terms, you don't really understand it yet.</p>
+                                    <h4 class="font-semibold mb-2">How to Implement:</h4>
+                                    <ol class="list-decimal list-inside space-y-2 text-slate-600">
+                                        <li>Choose a concept you want to understand (e.g., The Law of Variable Proportions).</li>
+                                        <li>Try to explain it in the simplest possible terms, as if you were teaching it to a child.</li>
+                                        <li>Identify the points where you struggle or use complex jargon. This is where your understanding is weak.</li>
+                                        <li>Go back to your study material to solidify your understanding, then simplify your explanation again.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item border border-slate-200 rounded-lg">
+                            <button class="accordion-header w-full flex justify-between items-center text-left p-4 bg-slate-50 hover:bg-slate-100 transition">
+                                <span class="font-semibold text-lg text-slate-800">Mind Mapping</span>
+                                 <span class="accordion-icon text-blue-500 text-2xl font-light transform transition-transform">+</span>
+                            </button>
+                            <div class="accordion-content">
+                                <div class="p-4 border-t border-slate-200">
+                                    <p class="text-slate-600 mb-4">Mind mapping is a powerful visual tool for organizing information and understanding how different concepts are interconnected. It's especially effective for subjects like Law and Economics.</p>
+                                    <h4 class="font-semibold mb-2">How to Implement:</h4>
+                                    <ol class="list-decimal list-inside space-y-2 text-slate-600">
+                                        <li>Start with the central topic in the middle of a page (e.g., "Indian Contract Act").</li>
+                                        <li>Create main branches for major sub-topics (e.g., "Offer," "Acceptance," "Consideration").</li>
+                                        <li>Add smaller sub-branches for details, rules, and exceptions.</li>
+                                        <li>Use colors and simple icons to make connections visually clear. The act of creating the map is a powerful form of active recall itself.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="finalWeek" class="content-section">
+                 <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h2 class="text-2xl font-bold mb-2 text-slate-900">The Final Gauntlet: Mock Tests & D-Day Protocol</h2>
+                    <p class="text-slate-600 mb-6">
+                        The final week is about transitioning from a student to a test-taker. The focus shifts from learning new material to mastering exam strategy, time management, and presentation. This is where you turn preparation into peak performance.
+                    </p>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-bold mb-3 text-slate-800">The Mock Test Crucible</h3>
+                            <p class="text-slate-600 mb-4">Simply taking a test is not enough; the real value lies in the post-mortem analysis. For every mock test you take, perform the following analysis:</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="bg-blue-500 text-white rounded-full h-6 w-6 text-sm flex items-center justify-center mr-3 mt-1 flex-shrink-0">1</span>
+                                    <p><strong class="font-semibold text-slate-700">Error Analysis:</strong> Categorize every mistake. Was it a conceptual error (misunderstanding), a calculation error, a silly mistake (misreading), or a time-pressure error? Knowing the 'why' behind your mistakes is key.</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-blue-500 text-white rounded-full h-6 w-6 text-sm flex items-center justify-center mr-3 mt-1 flex-shrink-0">2</span>
+                                    <p><strong class="font-semibold text-slate-700">Time Analysis:</strong> Identify questions or sections that consumed a disproportionate amount of time. Re-evaluate your approach to find faster methods or shortcuts.</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="bg-blue-500 text-white rounded-full h-6 w-6 text-sm flex items-center justify-center mr-3 mt-1 flex-shrink-0">3</span>
+                                    <p><strong class="font-semibold text-slate-700">Weak Area Identification:</strong> Use the error data to pinpoint specific chapters that are consistently problematic. Laser-focus your final revision time on these areas.</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="border-t border-slate-200 pt-6">
+                            <h3 class="text-xl font-bold mb-3 text-slate-800">D-Day Protocol: Mental & Physical Preparedness</h3>
+                             <p class="text-slate-600 mb-4">Your state of mind on exam day is as important as your knowledge. Follow this protocol for a calm, confident performance.</p>
+                             <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-slate-800">The Night Before</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Avoid cramming. Get 7-8 hours of quality sleep. Visualize the exam process going smoothly to reduce anxiety.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-slate-800">Exam Morning</h4>
+                                    <p class="text-sm text-slate-600 mt-1">Have a light, nutritious meal. Stay hydrated. Arrive at the center early to avoid last-minute stress.</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-lg col-span-1 md:col-span-2">
+                                    <h4 class="font-semibold text-slate-800">The First 15 Minutes (Reading Time)</h4>
+                                    <p class="text-sm text-slate-600 mt-1">This is CRITICAL. Scan the entire paper, identify the questions you are most confident about, and decide the sequence of attempt. This simple plan prevents panic and ensures a strong start.</p>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const studyData = {
+            accounting: {
+                title: "ABC Analysis for Accounting",
+                labels: ['Category A (Highest)', 'Category B (High)', 'Category C (Moderate)'],
+                data: [5, 3, 2],
+                chapters: [
+                    { name: 'Final Accounts (Sole Proprietors & NPOs)', category: 'A' },
+                    { name: 'Partnership Accounts', category: 'A' },
+                    { name: 'Company Accounts', category: 'A' },
+                    { name: 'Bank Reconciliation Statement', category: 'A' },
+                    { name: 'Rectification of Errors', category: 'A' },
+                    { name: 'Inventories', category: 'B' },
+                    { name: 'Depreciation and Amortisation', category: 'B' },
+                    { name: 'Accounting for Special Transactions', category: 'B' },
+                    { name: 'Theoretical Framework', category: 'C' },
+                    { name: 'Accounting Process', category: 'C' },
+                ],
+                techniques: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Mastering Formats</h4>
+                            <p class="text-slate-600 mt-1">Adherence to prescribed formats for financial statements is non-negotiable. Practice drawing them repeatedly to commit them to memory.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Conquering Adjustments</h4>
+                            <p class="text-slate-600 mt-1">Most marks in Final Accounts lie in correctly handling adjustments (e.g., closing stock, depreciation, provisions). Practice these until they are second nature.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">The Power of Working Notes</h4>
+                            <p class="text-slate-600 mt-1">ICAI uses step-wise marking. Clear, detailed, and properly referenced Working Notes are crucial for securing partial marks, even if the final answer is incorrect.</p>
+                        </div>
+                    </div>
+                `
+            },
+            law: {
+                title: "ABC Analysis for Business Laws",
+                labels: ['Category A (Highest)', 'Category B (High)', 'Category C (Moderate)'],
+                data: [3, 2, 2],
+                chapters: [
+                    { name: 'The Indian Contract Act, 1872', category: 'A' },
+                    { name: 'The Sale of Goods Act, 1930', category: 'A' },
+                    { name: 'The Indian Partnership Act, 1932', category: 'A' },
+                    { name: 'The Companies Act, 2013', category: 'B' },
+                    { name: 'The Negotiable Instruments Act, 1881', category: 'B' },
+                    { name: 'The Limited Liability Partnership Act, 2008', category: 'C' },
+                    { name: 'Indian Regulatory Framework', category: 'C' },
+                ],
+                techniques: `
+                    <div>
+                        <h4 class="font-semibold text-lg text-slate-800 mb-3">The P-A-C Framework for Case Studies</h4>
+                        <p class="text-slate-600 mb-4">To score high marks in case studies, you must use a structured format. The P-A-C (Provision-Analysis-Conclusion) method is highly effective and demonstrates a logical legal argument.</p>
+                        <div class="grid md:grid-cols-3 gap-4 text-center">
+                            <div class="bg-blue-100 p-4 rounded-lg border border-blue-200">
+                                <p class="font-bold text-blue-800 text-2xl">P</p>
+                                <h5 class="font-semibold mt-1">Provision</h5>
+                                <p class="text-sm text-blue-700 mt-1">State the relevant legal provision from the Act. Quote section numbers only if 100% certain.</p>
+                            </div>
+                            <div class="bg-green-100 p-4 rounded-lg border border-green-200">
+                                <p class="font-bold text-green-800 text-2xl">A</p>
+                                <h5 class="font-semibold mt-1">Analysis</h5>
+                                <p class="text-sm text-green-700 mt-1">Connect the facts of the given case to the legal provision. Explain *how* the law applies to the situation.</p>
+                            </div>
+                            <div class="bg-amber-100 p-4 rounded-lg border border-amber-200">
+                                <p class="font-bold text-amber-800 text-2xl">C</p>
+                                <h5 class="font-semibold mt-1">Conclusion</h5>
+                                <p class="text-sm text-amber-700 mt-1">Provide a definitive conclusion based on your analysis, directly answering the question asked.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            quants: {
+                title: "ABC Analysis for Quantitative Aptitude",
+                labels: ['Category A (Highest)', 'Category B (High)', 'Category C (Moderate)'],
+                data: [4, 3, 3],
+                chapters: [
+                    { name: 'Time Value of Money', category: 'A' },
+                    { name: 'Measures of Central Tendency & Dispersion', category: 'A' },
+                    { name: 'Statistical Representation of Data', category: 'A' },
+                    { name: 'Logical Reasoning (All Chapters)', category: 'A' },
+                    { name: 'Probability & Theoretical Distributions', category: 'B' },
+                    { name: 'Sequence and Series', category: 'B' },
+                    { name: 'Ratio, Proportion, Indices, Logarithms & Equations', category: 'B' },
+                    { name: 'Correlation & Regression', category: 'C' },
+                    { name: 'Index Numbers', category: 'C' },
+                    { name: 'Permutations & Combinations, Sets, Calculus', category: 'C' },
+                ],
+                techniques: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Calculator Mastery</h4>
+                            <p class="text-slate-600 mt-1">Your calculator is your best friend. Master the M+, M-, MRC, and GT functions to perform complex calculations without re-entering numbers. Practice shortcuts for Time Value of Money problems to save critical minutes.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Advanced MCQ Techniques</h4>
+                            <p class="text-slate-600 mt-1"><strong>Elimination:</strong> If you can eliminate two wrong options, your chance of a correct guess rises from 25% to 50%.<br><strong>Back-solving:</strong> For equations, substitute the options back into the question. It's often faster than solving from scratch.</p>
+                        </div>
+                         <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Intelligent Guessing</h4>
+                            <p class="text-slate-600 mt-1">In a negative marking system, blind guessing is harmful. Only make a calculated guess if you can confidently eliminate at least one, preferably two, options. Otherwise, leave it blank.</p>
+                        </div>
+                    </div>
+                `
+            },
+            economics: {
+                title: "ABC Analysis for Business Economics",
+                labels: ['Category A (Highest)', 'Category B (High)', 'Category C (Moderate)'],
+                data: [4, 4, 3],
+                chapters: [
+                    { name: 'Price Determination in Different Markets', category: 'A' },
+                    { name: 'Determination of National Income', category: 'A' },
+                    { name: 'Theory of Demand and Supply', category: 'A' },
+                    { name: 'Theory of Production and Cost', category: 'A' },
+                    { name: 'Public Finance', category: 'B' },
+                    { name: 'Money Market', category: 'B' },
+                    { name: 'International Trade', category: 'B' },
+                    { name: 'Business Cycles', category: 'B' },
+                    { name: 'Indian Economy', category: 'C' },
+                    { name: 'Nature & Scope of Business Economics', category: 'C' },
+                ],
+                techniques: `
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Deep Conceptual Clarity</h4>
+                            <p class="text-slate-600 mt-1">Focus on the 'why' behind economic principles, not just 'what'. For example, understand the income and substitution effects that cause the demand curve to slope downwards. This is key for application-based MCQs.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Graphical Interpretation</h4>
+                            <p class="text-slate-600 mt-1">Many questions test your ability to interpret graphs. Master the relationships between cost curves (MC, AC, AVC) and the equilibrium conditions in different market structures.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-slate-800">Rigorous MCQ Practice</h4>
+                            <p class="text-slate-600 mt-1">Solve a high volume of MCQs daily. For each question, don't just find the right answer—understand why the other three options are wrong. This deepens your understanding and prepares you for tricky questions.</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const contentSections = document.querySelectorAll('.content-section');
+        const subjectTabButtons = document.querySelectorAll('.subject-tab-btn');
+        const chapterListContainer = document.getElementById('chapter-list');
+        const techniqueContainer = document.getElementById('technique-content');
+        const chartTitleEl = document.getElementById('chart-title');
+        
+        let currentChart = null;
+        let currentSubject = 'accounting';
+        let visibleCategories = ['A', 'B', 'C'];
+
+        function switchTab(tabId) {
+            tabButtons.forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('tab-inactive');
+                } else {
+                    btn.classList.add('tab-inactive');
+                    btn.classList.remove('tab-active');
+                }
+            });
+            contentSections.forEach(section => {
+                if (section.id === tabId) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+
+        function switchSubjectTab(subjectId) {
+            currentSubject = subjectId;
+            subjectTabButtons.forEach(btn => {
+                if (btn.dataset.subject === subjectId) {
+                    btn.classList.add('subject-tab-active');
+                    btn.classList.remove('subject-tab-inactive');
+                } else {
+                    btn.classList.add('subject-tab-inactive');
+                    btn.classList.remove('subject-tab-active');
+                }
+            });
+            visibleCategories = ['A', 'B', 'C'];
+            updateSubjectContent(subjectId);
+        }
+
+        function getCategoryStyles(category) {
+            switch(category) {
+                case 'A': return { badge: 'bg-red-100 text-red-800', border: 'border-red-200' };
+                case 'B': return { badge: 'bg-amber-100 text-amber-800', border: 'border-amber-200' };
+                case 'C': return { badge: 'bg-sky-100 text-sky-800', border: 'border-sky-200' };
+                default: return { badge: 'bg-slate-100 text-slate-800', border: 'border-slate-200' };
+            }
+        }
+
+        function renderChapterList() {
+            const subjectData = studyData[currentSubject];
+            chapterListContainer.innerHTML = '';
+            const filteredChapters = subjectData.chapters.filter(ch => visibleCategories.includes(ch.category));
+            
+            if (filteredChapters.length === 0) {
+                 chapterListContainer.innerHTML = `<div class="text-center text-slate-500 p-4 bg-slate-50 rounded-lg">No chapters in this category. Click a legend item on the chart to filter.</div>`;
+                 return;
+            }
+
+            filteredChapters.forEach(chapter => {
+                const styles = getCategoryStyles(chapter.category);
+                const chapterEl = document.createElement('div');
+                chapterEl.className = `p-4 border ${styles.border} rounded-lg flex items-center justify-between bg-white`;
+                chapterEl.innerHTML = `
+                    <p class="text-slate-700 font-medium">${chapter.name}</p>
+                    <span class="text-xs font-bold px-2 py-1 ${styles.badge} rounded-full">Cat ${chapter.category}</span>
+                `;
+                chapterListContainer.appendChild(chapterEl);
+            });
+        }
+
+        function updateSubjectContent(subjectId) {
+            const subjectData = studyData[subjectId];
+            chartTitleEl.textContent = subjectData.title;
+            renderChapterList();
+            techniqueContainer.innerHTML = subjectData.techniques;
+            renderChart(subjectData);
+        }
+        
+        function renderChart(subjectData) {
+            const ctx = document.getElementById('subjectChart').getContext('2d');
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            currentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: subjectData.labels,
+                    datasets: [{
+                        label: 'Number of Topics',
+                        data: subjectData.data,
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(14, 165, 233, 0.7)',
+                        ],
+                        borderColor: [
+                            'rgba(239, 68, 68, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(14, 165, 233, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            onClick: (e, legendItem, legend) => {
+                                const index = legendItem.index;
+                                const category = ['A', 'B', 'C'][index];
+                                
+                                const alreadyHidden = !visibleCategories.includes(category);
+                                if (alreadyHidden) {
+                                    visibleCategories.push(category);
+                                } else {
+                                    visibleCategories = visibleCategories.filter(c => c !== category);
+                                }
+                                
+                                legend.chart.update();
+                                renderChapterList();
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleFont: { size: 16 },
+                            bodyFont: { size: 14 },
+                            padding: 12,
+                            cornerRadius: 6,
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                switchTab(button.dataset.tab);
+            });
+        });
+
+        subjectTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                switchSubjectTab(button.dataset.subject);
+            });
+        });
+        
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const accordionItem = header.parentElement;
+                const accordionContent = header.nextElementSibling;
+                const accordionIcon = header.querySelector('.accordion-icon');
+
+                accordionItem.classList.toggle('open');
+
+                if (accordionItem.classList.contains('open')) {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+                    accordionIcon.textContent = '-';
+                    accordionIcon.classList.add('rotate-180');
+                } else {
+                    accordionContent.style.maxHeight = '0';
+                    accordionIcon.textContent = '+';
+                    accordionIcon.classList.remove('rotate-180');
+                }
+            });
+        });
+
+        switchSubjectTab('accounting');
+    </script>
+</body>
+</html>
